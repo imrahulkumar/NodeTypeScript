@@ -12,3 +12,8 @@ npm install -g typescript ts-node
 
 npm install mongoose @types/mongoose
 
+
+## Install body parser to read x-www-form-urlencoder
+
+npm i body-parser @types/body-parser
+

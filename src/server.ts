@@ -1,3 +1,4 @@
+import bodyParser = require('body-parser');
 import * as  express from 'express';
 import * as mongoose from 'mongoose';
 import { getEnvironmentVariable } from './environments/env';
@@ -20,10 +21,15 @@ export class Server {
     }
 
     setConfiguration() {
-        this.setMongodb()
+        this.connectMongodb();
+        this.configureBodyParser();
     }
 
-    setMongodb() {
+    configureBodyParser() {
+        this.app.use(bodyParser.urlencoded({ extended: true }))
+    }
+
+    connectMongodb() {
         let dataBaseUrl = getEnvironmentVariable().db_url;
         mongoose.connect(dataBaseUrl, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
             console.log("mongodb is connect")
@@ -57,4 +63,5 @@ export class Server {
             })
         })
     }
+
 }
