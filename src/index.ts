@@ -1,5 +1,6 @@
 import * as  express from 'express';
 import * as mongoose from 'mongoose';
+import { getEnvironmentVariable } from './environments/env';
 
 
 
@@ -15,13 +16,13 @@ app.listen(5000, () => {
 
 //connecting with mongodb
 
-let url = "mongodb+srv://demo:demo@cluster0.cjcjs.mongodb.net/Cluster0?retryWrites=true&w=majority";
-mongoose.connect(url,{useNewUrlParser: true,useUnifiedTopology:true}).then(()=>{
+let url = getEnvironmentVariable().db_url;
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
 
     console.log("mongodb is connect")
-}).catch((err)=>{
+}).catch((err) => {
     console.log(err);
-    
+
 })
 
 
@@ -44,8 +45,8 @@ app.get('/login', (req: any, res, next) => {
     req.user = data;
     next();
 
-}, (req:any, res, next) => {
-      console.log("post middleware called");
-      res.send(req.user)
+}, (req: any, res, next) => {
+    console.log("post middleware called");
+    res.send(req.user)
 })
 
