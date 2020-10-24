@@ -1,7 +1,7 @@
 
 # To install inside project
 
-npm install typescript ts-node express node @type/express @types/node nodemon @type/node
+sudo npm install typescript ts-node express node @types/express @types/node nodemon @types/node
 
 
 # For Global Level install
