@@ -10,11 +10,24 @@ app.listen(5000, () => {
 
 });
 
+//middleware 
 
-// app.get('/login',(req,res)=>{
-//     console.log("req::",res);
+app.use((req, res, next) => {
+    console.log("Pre middleware called");
+    next();
+})
 
-//     res.send({res:"hey"})
-    
-// })
+
+
+app.get('/login', (req: any, res, next) => {
+
+    const data = [{ name: "testUserName" }];
+    console.log("Actual request url path")
+    req.user = data;
+    next();
+
+}, (req:any, res, next) => {
+      console.log("post middleware called");
+      res.send(req.user)
+})
 
