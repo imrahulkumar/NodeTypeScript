@@ -3,7 +3,7 @@ import User from '../modals/User';
 
 export class UserController {
 
-    static signup(req, res, next) {
+    static async signup(req, res, next) {
         const error = validationResult(req);
         let d = req.body;
         const email = d.email;
@@ -18,13 +18,16 @@ export class UserController {
             password: password,
             username: username
         }
-        let user = new User(data);
+        
+        try {
+            let user = await new User(data).save();
+            res.send(user);
+        }
+        catch (e) {
+            next(e);
+        }
 
-        user.save().then((user) => {
-            res.send(user)
-        }).catch(err => {
-            next(err)
-        })
+
 
     }
 
