@@ -1,4 +1,5 @@
 import { body } from 'express-validator'
+import { isNumber } from 'util';
 import User from '../modals/User';
 
 export class UserValidators {
@@ -7,7 +8,7 @@ export class UserValidators {
         return [
             body('email', 'Email is Required').isEmail()
                 .custom((email, { req }) => {
-                  return User.findOne({ email: email }).then((user) => {
+                    return User.findOne({ email: email }).then((user) => {
                         if (user) {
                             throw new Error('User Already Exist')
                         } else {
@@ -21,7 +22,12 @@ export class UserValidators {
         ];
     }
 
-
+    static verifyUser() {
+          return [
+              body('verification_token','Verifiction Token is Required').isNumeric(),
+              body('email','Email is required').isEmail()
+          ]
+    }
 
 
 }
