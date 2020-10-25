@@ -17,3 +17,16 @@ npm install mongoose @types/mongoose
 
 npm i body-parser @types/body-parser
 
+
+## For validation of req. use the 3rd party package
+
+npm install --save express-validator
+
+
+## For validation of req. use the 3rd part package
+
+npm install joi
+npm install --save @types/joi
+
+
+
