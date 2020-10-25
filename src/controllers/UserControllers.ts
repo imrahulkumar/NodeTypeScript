@@ -9,7 +9,6 @@ export class UserController {
         const email = d.email;
         const password = d.password;
         const username = d.username;
-        console.log(d);
         if (!error.isEmpty()) {
             next(new Error(error.array()[0].msg));
             return;
