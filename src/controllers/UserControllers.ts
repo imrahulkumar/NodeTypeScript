@@ -28,7 +28,7 @@ export class UserController {
             res.send(user);
 
             //SEND VERIFICATION EMAIL
-            await  NodeMailer.sendEmail({
+            await NodeMailer.sendEmail({
                 to: ['rahulgbu13@gmail.com'],
                 subject: 'Email Verification',
                 html: `<h1>${verificationToken}</h1>`
@@ -36,7 +36,7 @@ export class UserController {
             // console.log("a:::", a);
 
 
-          
+
         }
         catch (e) {
             next(e);
@@ -67,6 +67,39 @@ export class UserController {
 
             next(e)
         }
+    }
 
+
+
+    static async resendVerificationEmail(req,res, next) {
+        // console.log(re)
+        const email = req.query.email;
+        const verificationToken = Utils.generateVerificationToken();
+        try {
+            const user = await User.findOneAndUpdate({ email: email }, {
+                verification_token: verificationToken,
+                verification_token_time: Date.now() + new Utils().MAX_TOKEN_TIME
+            })
+
+            if (user) {
+                //SEND VERIFICATION EMAIL
+                await NodeMailer.sendEmail({
+                    to: ['rahulgbu13@gmail.com'],
+                    subject: 'Email Verification',
+                    html: `<h1>${verificationToken}</h1>`
+                })
+
+                res.json({
+                    success: true
+                })
+
+            } else {
+                throw Error('User Does not Exist')
+            }
+
+        }
+        catch (e) {
+            next(e)
+        }
     }
 }

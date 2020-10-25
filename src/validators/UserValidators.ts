@@ -1,5 +1,5 @@
-import { body } from 'express-validator'
-import { isNumber } from 'util';
+
+import { body, query } from 'express-validator'
 import User from '../modals/User';
 
 export class UserValidators {
@@ -23,11 +23,14 @@ export class UserValidators {
     }
 
     static verifyUser() {
-          return [
-              body('verification_token','Verifiction Token is Required').isNumeric(),
-              body('email','Email is required').isEmail()
-          ]
+        return [
+            body('verification_token', 'Verifiction Token is Required').isNumeric(),
+            body('email', 'Email is required').isEmail()
+        ]
     }
 
+    static resendVerificationEmail() {
+        return [query('email', 'Email is required').isEmail()]
+    }
 
 }
