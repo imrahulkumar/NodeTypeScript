@@ -23,7 +23,8 @@ export class UserController {
         const error = validationResult(req)
 
         if (!error.isEmpty()) {
-            console.log(error.array())
+            const errorMsg = new Error(error.array()[0].msg)
+            next(errorMsg)
         }
 
     }
