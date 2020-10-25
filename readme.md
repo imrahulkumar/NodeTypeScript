@@ -54,5 +54,21 @@ npm install --save @types/joi
      503 Service Unavailable
 
 
+## To send the email we have to use smpt server eg. Sendgrid
+
+
+## To make the connection with smpt server in node we will use Nodemailer
+      
+   npm i nodemailer
+   npm i @types/nodemailer
+
+  
+## To connect the Nodemailer and Sendgrid we will use nodemailer-sendgrid-transporter
+
+   npm i nodemailer-sendgrid-transport   
+         
+
+
+
 
 
