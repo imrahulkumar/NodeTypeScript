@@ -1,36 +1,33 @@
-import User from "../modals/User";
 import { validationResult } from 'express-validator'
+import User from '../modals/User';
 
 export class UserController {
 
-    static login(req, res, next) {
-        // res.send('we are here to login');
-        // const error = new Error('user does not exist');
-        // next(error)
-
-        // const email = req.body.email;
-        // const password = req.body.password;
-        // const user = new User({ email: email, password: password });
-
-
-        // user.save().then((user) => {
-        //     res.send(user);
-        // }).catch(err => {
-        //     next(err)
-        // })
-
-
-        const error = validationResult(req)
-
+    static signup(req, res, next) {
+        const error = validationResult(req);
+        let d = req.body;
+        const email = d.email;
+        const password = d.password;
+        const username = d.username;
+        console.log(d);
         if (!error.isEmpty()) {
-            const errorMsg = new Error(error.array()[0].msg)
-            next(errorMsg)
+            next(new Error(error.array()[0].msg));
+            return;
         }
+        const data = {
+            email: email,
+            password: password,
+            username: username
+        }
+        let user = new User(data);
+
+        user.save().then((user) => {
+            res.send(user)
+        }).catch(err => {
+            next(err)
+        })
 
     }
 
-    // static test(req, res, next) {
-    //     console.log('called');
 
-    // }
 }

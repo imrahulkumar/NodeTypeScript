@@ -21,7 +21,7 @@ class UserRouter {
 
     }
     postRoutes() {
-        this.router.post('/login', UserValidators.login(), UserController.login);
+        this.router.post('/signup', UserValidators.signup(), UserController.signup);
     }
     patchRoutes() {
 

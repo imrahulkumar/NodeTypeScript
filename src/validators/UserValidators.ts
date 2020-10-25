@@ -1,36 +1,27 @@
-import { format } from "path";
 import { body } from 'express-validator'
-
-import * as Joi from 'joi'
+import User from '../modals/User';
 
 export class UserValidators {
 
-    static login() {
+    static signup() {
         return [
-            body('username', 'Username is Required').isString(),
-            body('email', 'Email is Required').isEmail(),
-            body('password').custom((value,req:any) => {       
-                if (req.body.email) {
-                    return true
-                }
-                else {
-                    throw new Error('Testing Custom Validation');
-                }
-            })]
+            body('email', 'Email is Required').isEmail()
+                .custom((email, { req }) => {
+                  return User.findOne({ email: email }).then((user) => {
+                        if (user) {
+                            throw new Error('User Already Exist')
+                        } else {
+                            return true;
+                        }
+                    });
+                }),
+            body('password', 'Password is Required').isAlphanumeric()
+                .isLength({ min: 0, max: 20 }).withMessage('Password can be from 8-20 characters only'),
+            body('username', 'User Name is Required').isString()
+        ];
     }
 
 
-    // static login() {
-    // return [body('username', 'Username is Required').isString(),
-    // body('email', 'Email is Required').isEmail()]
 
-
-    // const schema = Joi.object().keys({ 
-    //     username: Joi.string().message.alphanum().min(3).max(30).required(),
-    //     email: Joi.number().integer().min(1970).max(2013), 
-    //   }); 
-
-
-    // }
 
 }
