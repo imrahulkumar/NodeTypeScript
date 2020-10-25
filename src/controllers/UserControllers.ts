@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator'
 import User from '../modals/User';
+import { NodeMailer } from '../utils/NodeMailer';
 import { Utils } from '../utils/Utils';
 
 export class UserController {
@@ -10,6 +11,7 @@ export class UserController {
         const email = d.email;
         const password = d.password;
         const username = d.username;
+        const verificationToken = Utils.generateVerificationToken();
 
         let MAX_TOKEN_TIME = new Utils().MAX_TOKEN_TIME
         const data = {
@@ -17,18 +19,24 @@ export class UserController {
             password: password,
             username: username,
             verified: false,
-            verification_token: Utils.generateVerificationToken(),
+            verification_token: verificationToken,
             verification_token_time: Date.now() + MAX_TOKEN_TIME
         }
 
         try {
             let user = await new User(data).save();
+            res.send(user);
 
             //SEND VERIFICATION EMAIL
+            await  NodeMailer.sendEmail({
+                to: ['rahulgbu13@gmail.com'],
+                subject: 'Email Verification',
+                html: `<h1>${verificationToken}</h1>`
+            })
+            // console.log("a:::", a);
 
 
-
-            res.send(user);
+          
         }
         catch (e) {
             next(e);
