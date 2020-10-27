@@ -33,4 +33,9 @@ export class UserValidators {
         return [query('email', 'Email is required').isEmail()]
     }
 
+    static login() {
+        return [body('email', 'Email is required').isEmail(),
+        body('password', 'Password is Required').isAlphanumeric()]
+    }
+
 }

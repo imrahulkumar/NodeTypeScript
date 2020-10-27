@@ -66,6 +66,11 @@ npm install --save @types/joi
 ## To connect the Nodemailer and Sendgrid we will use nodemailer-sendgrid-transporter
 
    npm i nodemailer-sendgrid-transport   
+
+
+## To Encrypt the password install node.bcrypt.js
+
+   npm i bcrypt
          
 
 
