@@ -71,6 +71,11 @@ npm install --save @types/joi
 ## To Encrypt the password install node.bcrypt.js
 
    npm i bcrypt
+
+## To install the jsonwebtoken
+   
+    npm i jsonwebtoken
+    npm i @types/jsonwebtoken
          
 
 

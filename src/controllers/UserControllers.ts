@@ -3,8 +3,8 @@ import User from '../modals/User';
 import { NodeMailer } from '../utils/NodeMailer';
 import { Utils } from '../utils/Utils';
 import * as Bcrypt from 'bcrypt';
-import { nextTick } from 'process';
-import { rejects } from 'assert';
+import * as Jwt from 'jsonwebtoken';
+import { getEnvironmentVariable } from '../environments/env';
 
 export class UserController {
 
@@ -17,7 +17,7 @@ export class UserController {
 
         let MAX_TOKEN_TIME = new Utils().MAX_TOKEN_TIME;
         try {
-            const hash = await UserController.encryptPassword(req, res, next);
+            const hash = await Utils.encryptPassword(req.password);
             const data = {
                 email: email,
                 password: hash,
@@ -107,26 +107,18 @@ export class UserController {
         let d = req.body;
         const email = d.email;
         const password = d.password;
+        const user = req.user;
 
-        User.findOne({ email: email }).then((user: any) => {
-            Bcrypt.compare(password, user.password, (err, same) => {
-                res.send(same)
-            })
-        })
-    }
+        try {
+            await Utils.comparePassword({ plainPassword: password, encryptPassword: user.password });
+            const data = { user_id: req.user._id, email: req.user.email }
+            const token = Jwt.sign(data, getEnvironmentVariable().jwt_secret, { expiresIn: '120d' });
+            const response = { user: user, toke: token };
+            res.json(response)
+        } catch (e) {
+            next(e);
+        }
 
-
-    private static async encryptPassword(req, res, next) {
-        return new Promise((resolve, reject) => {
-            Bcrypt.hash(req.body.password, 10, (err, hash) => {
-                if (err) {
-                    reject(err)
-                }
-                else {
-                    resolve(hash)
-                }
-            })
-        })
     }
 
 }

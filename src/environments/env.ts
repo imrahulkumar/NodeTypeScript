@@ -3,7 +3,8 @@ import { ProdEnvironment } from "./prod.env";
 
 
 export interface Environment {
-    db_url: string
+    db_url: string;
+    jwt_secret: string;
 }
 
 

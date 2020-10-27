@@ -34,7 +34,16 @@ export class UserValidators {
     }
 
     static login() {
-        return [body('email', 'Email is required').isEmail(),
+        return [body('email', 'Email is required').isEmail().custom((email, { req }) => {
+            return User.findOne({ email: email }).then(user => {
+                if (user) {
+                    req.user = user;
+                    return true;
+                } else {
+                    throw new Error('User Does Not Exist');
+                }
+            })
+        }),
         body('password', 'Password is Required').isAlphanumeric()]
     }
 
