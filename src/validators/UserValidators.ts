@@ -25,7 +25,6 @@ export class UserValidators {
     static verifyUser() {
         return [
             body('verification_token', 'Verifiction Token is Required').isNumeric(),
-            body('email', 'Email is required').isEmail()
         ]
     }
 
