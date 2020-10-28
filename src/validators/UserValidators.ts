@@ -51,4 +51,19 @@ export class UserValidators {
             body('new_password', 'New Password is Required').isAlphanumeric()
         ]
     }
+
+    static  sendResetPassword() {
+        return [
+            query('email', 'Email is Required').isEmail().custom(async (email, { req }) => {
+                return await User.findOne({ email: email }).then((user) => {
+                    if (user) {
+                        return true;
+                    }
+                    else {
+                        throw new Error("Email Does not Exist")
+                    }
+                })
+            })
+        ]
+    }
 }

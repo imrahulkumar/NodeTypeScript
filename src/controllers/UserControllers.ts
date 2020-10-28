@@ -62,8 +62,7 @@ export class UserController {
             } else {
                 throw new Error('Verification Token Is Expired. PLease Request For a new One.')
             }
-        } catch (e) {
-            console.log("ee", e);
+        } catch (e) {   
 
             next(e)
         }
@@ -72,7 +71,6 @@ export class UserController {
 
 
     static async resendVerificationEmail(req, res, next) {
-        // console.log(re)
         const email = req.user.email;
         const verificationToken = Utils.generateVerificationToken();
         try {
@@ -82,8 +80,7 @@ export class UserController {
             })
 
             if (user) {
-                //SEND VERIFICATION EMAIL
-                console.log("verification code:", verificationToken)
+                //SEND VERIFICATION EMAIL                
                 await NodeMailer.sendEmail({
                     to: ['rahulgbu13@gmail.com'],
                     subject: 'Email Verification',
@@ -141,6 +138,28 @@ export class UserController {
             next(e);
         }
 
+    }
+
+    static async sendResetPassword(req, res, next) {
+        const email = req.query.email;
+        const resetPasswordToken = Utils.generateVerificationToken();      
+        try {
+            const updateUser = await User.findOneAndUpdate({ email: email },
+                {
+                    updated_at: new Date(), reset_password_token: resetPasswordToken,
+                    reset_password_token_time: Date.now() + new Utils().MAX_TOKEN_TIME
+                }, { new: true });
+        
+            res.send(updateUser);
+
+            NodeMailer.sendEmail({
+                to: ['rahulgbu13@gmail.com'],
+                subject: "Reset Password Email",
+                html: `<h1>${resetPasswordToken}</h1>`
+            })
+        } catch (e) {          
+            next(e)
+        }
     }
 
 }

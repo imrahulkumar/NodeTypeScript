@@ -20,17 +20,17 @@ export class GlobalCheckErrorMiddleWare {
         try {
             req.errorStatus = 401;
             Jwt.verify(token, getEnvironmentVariable().jwt_secret, (err, decoded) => {
-            
-             if(err){
-                 next(err)
-             }
-             else if(!decoded){
-                 next(new Error('User Not Authorised'))
-             }
-             else{
-                 req.user = decoded;
-                 next();
-             }
+
+                if (err) {
+                    next(err)
+                }
+                else if (!decoded) {
+                    next(new Error('User Not Authorised'))
+                }
+                else {
+                    req.user = decoded;
+                    next();
+                }
 
             })
         }

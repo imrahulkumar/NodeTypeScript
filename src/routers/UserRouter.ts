@@ -20,7 +20,7 @@ class UserRouter {
 
     getRoutes() {
         this.router.get('/send/verification/email', UserValidators.resendVerificationEmail(),GlobalCheckErrorMiddleWare.authentication, UserController.resendVerificationEmail);
-
+        this.router.get('/reset/password',UserValidators.sendResetPassword(),GlobalCheckErrorMiddleWare.checkError,UserController.sendResetPassword)
 
     }
     postRoutes() {

@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec ts-node src/index.ts"
+    "start": "nodemon --exec ts-node src/index.ts",
+    "killPort": "fuser -k 5000/tcp",
+    "executeProject": "ts-node src/index.ts",
+    "nodets": "npm run killPort && npm run executeProject"
   },
   "author": "",
   "license": "ISC",
