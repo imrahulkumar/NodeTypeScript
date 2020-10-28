@@ -1,4 +1,4 @@
-import { validationResult } from 'express-validator'
+import { body, validationResult } from 'express-validator'
 import User from '../modals/User';
 import { NodeMailer } from '../utils/NodeMailer';
 import { Utils } from '../utils/Utils';
@@ -117,6 +117,27 @@ export class UserController {
             const response = { user: user, toke: token };
             res.json(response)
         } catch (e) {
+            next(e);
+        }
+
+    }
+
+    static async updatePassword(req, res, next) {
+        const user_id = req.user.user_id;
+        const password = req.body.password;
+        const newPassword = req.body.new_password;
+
+        try {
+            User.findOne({ _id: user_id }).then(async (user: any) => {
+                await Utils.comparePassword({ plainPassword: password, encryptPassword: user.password })
+            });
+            const encryptPassword = await Utils.encryptPassword(newPassword);
+
+            const newUser = await User.findOneAndUpdate({ _id: user_id }, { password: encryptPassword }, { new: true });
+
+            res.send(newUser);
+        }
+        catch (e) {
             next(e);
         }
 

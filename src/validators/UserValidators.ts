@@ -45,5 +45,10 @@ export class UserValidators {
         }),
         body('password', 'Password is Required').isAlphanumeric()]
     }
-
+    static updatePassword() {
+        return [
+            body('password', 'Password is Required').isAlphanumeric(),
+            body('new_password', 'New Password is Required').isAlphanumeric()
+        ]
+    }
 }
