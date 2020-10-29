@@ -61,12 +61,6 @@ export class UserValidators {
             body('new_password', 'New Password is Required').isAlphanumeric(),
             body('reset_password_token', 'Reset Password Token is Required').isNumeric()
                 .custom((token, { req }) => {
-
-                    console.log("req.reset_password_token_time).getTime()", new Date(req.user.reset_password_token_time).getTime());
-                    console.log("Date.now()", Date.now());
-                    console.log("compare", new Date(req.reset_password_token_time).getTime() < Date.now());
-
-
                     if (new Date(req.user.reset_password_token_time).getTime() < Date.now()) {
                         throw new Error('Token is Expired.')
                     }
