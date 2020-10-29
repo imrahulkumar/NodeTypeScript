@@ -47,12 +47,41 @@ export class UserValidators {
     }
     static updatePassword() {
         return [
+            body('email', 'Email is Required').custom((email, { req }) => {
+                return User.findOne({ email: email }).then(user => {
+                    if (user) {
+                        req.user = user;
+                        return true;
+                    } else {
+                        throw new Error('User Does Not Exist')
+                    }
+                })
+            }),
             body('password', 'Password is Required').isAlphanumeric(),
-            body('new_password', 'New Password is Required').isAlphanumeric()
+            body('new_password', 'New Password is Required').isAlphanumeric(),
+            body('reset_password_token', 'Reset Password Token is Required').isNumeric()
+                .custom((token, { req }) => {
+
+                    console.log("req.reset_password_token_time).getTime()", new Date(req.user.reset_password_token_time).getTime());
+                    console.log("Date.now()", Date.now());
+                    console.log("compare", new Date(req.reset_password_token_time).getTime() < Date.now());
+
+
+                    if (new Date(req.user.reset_password_token_time).getTime() < Date.now()) {
+                        throw new Error('Token is Expired.')
+                    }
+                    else if (Number(req.user.reset_password_token) === Number(token)) {
+                        return true;
+                    }
+                    else {
+                        req.errorStatus = 422;
+                        throw new Error('Reset Password Token is Invalid. Please Try Again.')
+                    }
+                })
         ]
     }
 
-    static  sendResetPassword() {
+    static sendResetPassword() {
         return [
             query('email', 'Email is Required').isEmail().custom(async (email, { req }) => {
                 return await User.findOne({ email: email }).then((user) => {

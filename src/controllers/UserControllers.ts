@@ -1,10 +1,12 @@
 import { body, validationResult } from 'express-validator'
 import User from '../modals/User';
-import { NodeMailer } from '../utils/NodeMailer';
+// import { NodeMailer } from '../utils/NodeMailer';
 import { Utils } from '../utils/Utils';
 import * as Bcrypt from 'bcrypt';
 import * as Jwt from 'jsonwebtoken';
 import { getEnvironmentVariable } from '../environments/env';
+import { Emailjs } from '../utils/Emailjs';
+import { EmailTemplate } from '../utils/TemplateEmailjs';
 
 export class UserController {
 
@@ -17,7 +19,7 @@ export class UserController {
 
         let MAX_TOKEN_TIME = new Utils().MAX_TOKEN_TIME;
         try {
-            const hash = await Utils.encryptPassword(req.password);
+            const hash = await Utils.encryptPassword(password);
             const data = {
                 email: email,
                 password: hash,
@@ -32,11 +34,9 @@ export class UserController {
             res.send(user);
 
             //SEND VERIFICATION EMAIL
-            await NodeMailer.sendEmail({
-                to: ['rahulgbu13@gmail.com'],
-                subject: 'Email Verification',
-                html: `<h1>${verificationToken}</h1>`
-            })
+            let templateParams = { name: data.username, verificationToken: data.verification_token, to: email };
+            let templateId = new EmailTemplate().emailTemplate.emailVerification.templateId;
+            Emailjs.sendEmail({ template_id: templateId, template_params: templateParams });
 
         }
         catch (e) {
@@ -47,7 +47,7 @@ export class UserController {
     static async verify(req, res, next) {
 
         const verificationToken = req.body.verification_token;
-        const email = req.user.email;
+        const email = req.body.email;
 
         try {
             const user = await User.findOneAndUpdate({
@@ -62,7 +62,7 @@ export class UserController {
             } else {
                 throw new Error('Verification Token Is Expired. PLease Request For a new One.')
             }
-        } catch (e) {   
+        } catch (e) {
 
             next(e)
         }
@@ -71,25 +71,21 @@ export class UserController {
 
 
     static async resendVerificationEmail(req, res, next) {
-        const email = req.user.email;
+        const email = req.query.email;
         const verificationToken = Utils.generateVerificationToken();
         try {
-            const user = await User.findOneAndUpdate({ email: email }, {
+            const user: any = await User.findOneAndUpdate({ email: email }, {
                 verification_token: verificationToken,
                 verification_token_time: Date.now() + new Utils().MAX_TOKEN_TIME
             })
 
             if (user) {
-                //SEND VERIFICATION EMAIL                
-                await NodeMailer.sendEmail({
-                    to: ['rahulgbu13@gmail.com'],
-                    subject: 'Email Verification',
-                    html: `<h1>${verificationToken}</h1>`
-                })
+                //SEND VERIFICATION EMAIL  
+                let templateParams = { name: user.username, verificationToken: verificationToken, to: email };
+                let templateId = new EmailTemplate().emailTemplate.emailVerification.templateId;
+                Emailjs.sendEmail({ template_id: templateId, template_params: templateParams });
 
-                res.json({
-                    success: true
-                })
+                res.json({ success: true })
 
             } else {
                 throw Error('User Does not Exist')
@@ -120,18 +116,16 @@ export class UserController {
     }
 
     static async updatePassword(req, res, next) {
-        const user_id = req.user.user_id;
+        const user = req.user;
         const password = req.body.password;
         const newPassword = req.body.new_password;
-
         try {
-            User.findOne({ _id: user_id }).then(async (user: any) => {
+            await User.findOne({ _id: user._id }).then(async (user: any) => {
                 await Utils.comparePassword({ plainPassword: password, encryptPassword: user.password })
             });
             const encryptPassword = await Utils.encryptPassword(newPassword);
 
-            const newUser = await User.findOneAndUpdate({ _id: user_id }, { password: encryptPassword }, { new: true });
-
+            const newUser = await User.findOneAndUpdate({ _id: user._id }, { password: encryptPassword }, { new: true });
             res.send(newUser);
         }
         catch (e) {
@@ -142,22 +136,22 @@ export class UserController {
 
     static async sendResetPassword(req, res, next) {
         const email = req.query.email;
-        const resetPasswordToken = Utils.generateVerificationToken();      
+        const resetPasswordToken = Utils.generateVerificationToken();
         try {
-            const updateUser = await User.findOneAndUpdate({ email: email },
+            let updateUser: any = await User.findOneAndUpdate({ email: email },
                 {
                     updated_at: new Date(), reset_password_token: resetPasswordToken,
                     reset_password_token_time: Date.now() + new Utils().MAX_TOKEN_TIME
                 }, { new: true });
-        
+
             res.send(updateUser);
 
-            NodeMailer.sendEmail({
-                to: ['rahulgbu13@gmail.com'],
-                subject: "Reset Password Email",
-                html: `<h1>${resetPasswordToken}</h1>`
-            })
-        } catch (e) {          
+            //SEND RESET VERIFICATION EMAIL
+            let templateParams = { name: updateUser.username, verificationToken: resetPasswordToken, to: email };
+            let templateId = new EmailTemplate().emailTemplate.resetPaswordEmail.templateId;
+            Emailjs.sendEmail({ template_id: templateId, template_params: templateParams });
+
+        } catch (e) {
             next(e)
         }
     }

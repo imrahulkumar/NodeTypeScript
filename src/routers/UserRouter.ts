@@ -19,19 +19,29 @@ class UserRouter {
 
 
     getRoutes() {
-        this.router.get('/send/verification/email', UserValidators.resendVerificationEmail(),GlobalCheckErrorMiddleWare.authentication, UserController.resendVerificationEmail);
-        this.router.get('/reset/password',UserValidators.sendResetPassword(),GlobalCheckErrorMiddleWare.checkError,UserController.sendResetPassword)
+
+        //STEP 3: To resend the verification
+        this.router.get('/send/verification/email', UserValidators.resendVerificationEmail(), UserController.resendVerificationEmail);
+
+        //STEP 4: To reset the password
+        this.router.get('/reset/password', UserValidators.sendResetPassword(), GlobalCheckErrorMiddleWare.checkError, UserController.sendResetPassword)
 
     }
     postRoutes() {
+        //STEP 1 : To create a user using signup
         this.router.post('/signup', UserValidators.signup(), GlobalCheckErrorMiddleWare.checkError, UserController.signup);
-        this.router.post('/login', UserValidators.login(), GlobalCheckErrorMiddleWare.checkError, UserController.login)
+
+        this.router.post('/login', UserValidators.login(), GlobalCheckErrorMiddleWare.checkError, UserController.login);
+
     }
     patchRoutes() {
 
-        this.router.patch('/verify', UserValidators.verifyUser(), GlobalCheckErrorMiddleWare.checkError,GlobalCheckErrorMiddleWare.authentication, UserController.verify);
-        this.router.patch('/update/password',UserValidators.updatePassword(),GlobalCheckErrorMiddleWare.checkError,GlobalCheckErrorMiddleWare.authentication,UserController.updatePassword)
-       
+        //STEP 2 : To verify the email
+        this.router.patch('/verify', UserValidators.verifyUser(), GlobalCheckErrorMiddleWare.checkError, UserController.verify);
+
+        //STEP 5 : To update the password
+        this.router.patch('/update/password',GlobalCheckErrorMiddleWare.authentication, UserValidators.updatePassword(), GlobalCheckErrorMiddleWare.checkError, UserController.updatePassword)
+
     }
     deleteRoutes() {
 

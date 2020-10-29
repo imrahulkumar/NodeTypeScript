@@ -76,6 +76,10 @@ npm install --save @types/joi
    
     npm i jsonwebtoken
     npm i @types/jsonwebtoken
+
+## To install the emailjs
+  
+   npm install emailjs
          
 
 
