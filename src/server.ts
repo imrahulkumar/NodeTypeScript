@@ -39,6 +39,7 @@ export class Server {
     }
 
     setRoutes() {
+        this.app.use('/src/uploads', express.static('src/uploads'))
         this.app.use('/api/user', UserRouter);
     }
 

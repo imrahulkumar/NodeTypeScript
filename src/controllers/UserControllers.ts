@@ -7,6 +7,7 @@ import * as Jwt from 'jsonwebtoken';
 import { getEnvironmentVariable } from '../environments/env';
 import { Emailjs } from '../utils/Emailjs';
 import { EmailTemplate } from '../utils/TemplateEmailjs';
+import { date } from 'joi';
 
 export class UserController {
 
@@ -154,6 +155,21 @@ export class UserController {
         } catch (e) {
             next(e)
         }
+    }
+    static async updateProfilePic(req, res, next) {
+
+        try {
+
+            const userId = req.user.user_id;
+            const fileUrl = 'https://localhost:5000/' + req.file.path
+            const user = await User.findOneAndUpdate({ _id: userId },
+                { updated_at: new Date(), profile_pic_url: fileUrl }, { new: true })
+            res.send(user)
+
+        } catch (e) {
+            next(e)
+        }
+
     }
 
 }

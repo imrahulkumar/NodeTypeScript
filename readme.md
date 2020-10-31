@@ -80,7 +80,16 @@ npm install --save @types/joi
 ## To install the emailjs
   
    npm install emailjs
-         
+
+   -> And Use the api provided in the documentation.
+
+## To install multer to read the file.
+
+    npm i multer
+    npm i @types/multer
+    -> Internally it used the busboy to store the data.
+
+
 
 
 

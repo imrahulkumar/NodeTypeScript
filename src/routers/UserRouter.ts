@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/UserControllers';
 import { GlobalCheckErrorMiddleWare } from '../middleware/CheckError';
+import { Utils } from '../utils/Utils';
 import { UserValidators } from '../validators/UserValidators';
 
 class UserRouter {
@@ -40,7 +41,10 @@ class UserRouter {
         this.router.patch('/verify', UserValidators.verifyUser(), GlobalCheckErrorMiddleWare.checkError, UserController.verify);
 
         //STEP 5 : To update the password
-        this.router.patch('/update/password',GlobalCheckErrorMiddleWare.authentication, UserValidators.updatePassword(), GlobalCheckErrorMiddleWare.checkError, UserController.updatePassword)
+        this.router.patch('/update/password', GlobalCheckErrorMiddleWare.authentication, UserValidators.updatePassword(), GlobalCheckErrorMiddleWare.checkError, UserController.updatePassword)
+
+        //STEP 6 : To update the profile pic.
+        this.router.patch('/update/profilePic',GlobalCheckErrorMiddleWare.authentication,new Utils().multer.single('profile_pic'),UserValidators.updateProfilePic(),GlobalCheckErrorMiddleWare.checkError,UserController.updateProfilePic)
 
     }
     deleteRoutes() {
