@@ -8,6 +8,8 @@ export class CommentController {
 
         const content = req.body.content;
         const post = req.post;
+        console.log("post", post);
+        let postObj: any = { _id: post._id, comments: [] }
 
         try {
             const comment = new Comment({
@@ -15,12 +17,12 @@ export class CommentController {
                 created_at: new Date(),
                 updated_at: new Date()
             });
-            post.comments.push(comment);
-            await Promise.all([comment.save(), post.save()]);
+            postObj.comments.push(comment);
+            await Promise.all([comment.save(), postObj.save()]);
             res.send(comment);
 
         } catch (e) {
-
+            next(e)
         }
 
     }

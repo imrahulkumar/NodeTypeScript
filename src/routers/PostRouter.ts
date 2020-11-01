@@ -21,10 +21,14 @@ class PostRouter {
     }
 
 
-    getRoutes() { }
+    getRoutes() {
+     this.router.get('/me',GlobalCheckErrorMiddleWare.authentication,PostController.getPostByUser)
+    }
+
     postRoutes() {
         this.router.post('/add', GlobalCheckErrorMiddleWare.authentication, PostValidators.addPost(), GlobalCheckErrorMiddleWare.checkError, PostController.addPost)
     }
+
     patchRoutes() { }
     deleteRoutes() { }
 

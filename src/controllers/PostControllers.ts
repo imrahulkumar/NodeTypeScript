@@ -23,5 +23,16 @@ export class PostController {
 
     }
 
+    static async getPostByUser(req, res, next) {
+        const userId = req.user.user_id;
+        try {
+            // const post = await Post.find({ user_id: userId }).exec(); //When not populate the comment.
+            const post = await Post.find({ user_id: userId }).populate('comments').exec(); // When need to populate the comment also.
+            res.send(post);
+
+        } catch (e) {
+            next(e);
+        }
+    }
 
 }
