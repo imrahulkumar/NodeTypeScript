@@ -1,13 +1,9 @@
-import { body, validationResult } from 'express-validator'
 import User from '../modals/User';
-// import { NodeMailer } from '../utils/NodeMailer';
 import { Utils } from '../utils/Utils';
-import * as Bcrypt from 'bcrypt';
 import * as Jwt from 'jsonwebtoken';
 import { getEnvironmentVariable } from '../environments/env';
 import { Emailjs } from '../utils/Emailjs';
 import { EmailTemplate } from '../utils/TemplateEmailjs';
-import { date } from 'joi';
 
 export class UserController {
 

@@ -2,6 +2,7 @@ import bodyParser = require('body-parser');
 import * as  express from 'express';
 import * as mongoose from 'mongoose';
 import { getEnvironmentVariable } from './environments/env';
+import PostRouter from './routers/PostRouter';
 import UserRouter from './routers/UserRouter';
 
 export class Server {
@@ -41,6 +42,7 @@ export class Server {
     setRoutes() {
         this.app.use('/src/uploads', express.static('src/uploads'))
         this.app.use('/api/user', UserRouter);
+        this.app.use('/api/post', PostRouter)
     }
 
     error404Handler() {
