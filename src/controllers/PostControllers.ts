@@ -48,7 +48,7 @@ export class PostController {
             const postCount = await Post.countDocuments({ user_id: userId });
             totalPage = Math.ceil(postCount / perPage);
 
-            if(page > totalPage){
+            if (page > totalPage) {
                 throw Error("Page Not Exist");
             }
 
@@ -82,7 +82,7 @@ export class PostController {
         let totalPage;
         //PAGINATION LOGIC END
 
-       
+
 
 
         try {
@@ -90,19 +90,19 @@ export class PostController {
             const postCount = await Post.estimatedDocumentCount();
             totalPage = Math.ceil(postCount / perPage);
 
-            if(page > totalPage){
+            if (page > totalPage) {
                 throw Error("Page Not Exist");
             }
 
             if (totalPage === page || totalPage === 0) {
                 pageToken = null;
             }
-            const posts:any = await Post.find({}, { __v: 0, user_id: 0 })
+            const posts: any = await Post.find({}, { __v: 0, user_id: 0 })
                 .populate('').limit(perPage).skip((perPage * page) - perPage);
 
-                //Virtual Field Logic
-                console.log("comment Count",posts[0].commentCount);
-                
+            //Virtual Field Logic
+            console.log("comment Count", posts[0].commentCount);
+
 
             res.json({
                 post: posts,
@@ -110,12 +110,22 @@ export class PostController {
                 currentPage: currentPage,
                 prevPage: prevPage,
                 nextPage: pageToken,
-                postCount:posts[0].commentCount
+                postCount: posts[0].commentCount
             })
 
         } catch (e) {
             next(e);
         }
+    }
+
+
+    static async getPostById(req, res, next) {
+
+        res.json({
+            post:req.post,
+            commentCount : req.post.commentCount
+        })
+
     }
 
 }
