@@ -97,15 +97,20 @@ export class PostController {
             if (totalPage === page || totalPage === 0) {
                 pageToken = null;
             }
-            const posts = await Post.find({}, { __v: 0, user_id: 0 })
+            const posts:any = await Post.find({}, { __v: 0, user_id: 0 })
                 .populate('').limit(perPage).skip((perPage * page) - perPage);
+
+                //Virtual Field Logic
+                console.log("comment Count",posts[0].commentCount);
+                
 
             res.json({
                 post: posts,
                 totalPage: totalPage,
                 currentPage: currentPage,
                 prevPage: prevPage,
-                nextPage: pageToken
+                nextPage: pageToken,
+                postCount:posts[0].commentCount
             })
 
         } catch (e) {

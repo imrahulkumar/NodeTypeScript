@@ -12,4 +12,9 @@ const postSchema = new mongoose.Schema(
     }
 )
 
+//Virtual Field Logic
+postSchema.virtual('commentCount').get(function () {
+    return this.comments.length;
+})
+
 export default model('posts', postSchema);
