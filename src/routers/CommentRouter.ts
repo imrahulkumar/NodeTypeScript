@@ -29,7 +29,10 @@ class CommentRouter {
         this.router.patch('/edit/:id', GlobalCheckErrorMiddleWare.authentication, CommentValidators.editComment(), GlobalCheckErrorMiddleWare.checkError, CommentController.editComment);
     }
 
-    deleteRoutes() { }
+    deleteRoutes() { 
+        this.router.delete('/delete/:id', GlobalCheckErrorMiddleWare.authentication, CommentValidators.deleteComment(), GlobalCheckErrorMiddleWare.checkError, CommentController.deleteComment);
+ 
+    }
 
 }
 

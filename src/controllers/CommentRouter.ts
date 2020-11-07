@@ -45,7 +45,21 @@ export class CommentController {
         } catch (e) {
             next(e)
         }
+    }
 
+    static async deleteComment(req, res, next) {
+
+        const comment = req.comment;
+
+        try {
+
+            comment.remove();
+            res.send(comment);
+
+        }
+        catch (e) {
+
+        }
     }
 
 }
