@@ -1,5 +1,4 @@
 import { body, query, param } from 'express-validator'
-import { nextTick } from 'process';
 import Post from '../modals/Post'
 
 
@@ -23,6 +22,12 @@ export class CommentValidators {
                 }
             })
 
+        ]
+    }
+
+    static editComment() {
+        return [
+            body('content', 'Content is Required').isString()
         ]
     }
 

@@ -19,11 +19,16 @@ class CommentRouter {
 
 
     getRoutes() { }
+
     postRoutes() {
         //id of that post where comment is going to add. This is basically called param.
         this.router.post('/add/:id', GlobalCheckErrorMiddleWare.authentication, CommentValidators.addComment(), GlobalCheckErrorMiddleWare.checkError, CommentController.addComment)
     }
-    patchRoutes() { }
+
+    patchRoutes() {
+        this.router.patch('/edit/:id', GlobalCheckErrorMiddleWare.authentication, CommentValidators.editComment(), GlobalCheckErrorMiddleWare.checkError, CommentController.editComment);
+    }
+
     deleteRoutes() { }
 
 }

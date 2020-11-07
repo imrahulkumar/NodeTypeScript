@@ -24,5 +24,28 @@ export class CommentController {
 
     }
 
+    static async editComment(req, res, next) {
+
+        const content = req.body.content;
+        const commentId = req.params.id;
+
+        try {
+
+            const updateComment = await Comment.findOneAndUpdate({ _id: commentId }, {
+                content: content,
+                updated_at: new Date()
+            }, { new: true });
+
+            if (updateComment) {
+                res.send(updateComment)
+            } else {
+                throw new Error('Comment Does Not Exist');
+            }
+
+        } catch (e) {
+            next(e)
+        }
+
+    }
 
 }
