@@ -90,6 +90,13 @@ npm install --save @types/joi
     -> Internally it used the busboy to store the data.
 
 
+## For the CROWN JOB
+
+   npm i node-schedule
+   npm i @types/node-schedule
+  
+
+
 
 
 

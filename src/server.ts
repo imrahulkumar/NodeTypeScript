@@ -2,6 +2,7 @@ import bodyParser = require('body-parser');
 import * as  express from 'express';
 import * as mongoose from 'mongoose';
 import { getEnvironmentVariable } from './environments/env';
+import { Jobs } from './jobs/Jobs';
 import CommentRouter from './routers/CommentRouter';
 import PostRouter from './routers/PostRouter';
 import UserRouter from './routers/UserRouter';
@@ -25,6 +26,7 @@ export class Server {
     setConfiguration() {
         this.connectMongodb();
         this.configureBodyParser();
+        Jobs.runRequiredJobs();
     }
 
     configureBodyParser() {
