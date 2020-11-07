@@ -122,9 +122,36 @@ export class PostController {
     static async getPostById(req, res, next) {
 
         res.json({
-            post:req.post,
-            commentCount : req.post.commentCount
+            post: req.post,
+            commentCount: req.post.commentCount
         })
+
+    }
+
+    static async editPost(req, res, next) {
+
+        const content = req.body.content;
+        const postId = req.params.id;
+        console.log("hello id", postId);
+
+
+        try {
+
+            const updatePost = await Post.findOneAndUpdate({ _id: postId }, {
+                content: content,
+                updated_at: new Date()
+            }, { new: true }).populate('comments');
+
+            if (updatePost) {
+                res.send(updatePost)
+            } else {
+                throw new Error('Post Does not Exist');
+            }
+
+        }
+        catch (e) {
+            next(e)
+        }
 
     }
 
