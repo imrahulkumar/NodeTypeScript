@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import { model } from 'mongoose'
+import Comment from './Comment';
 
 const postSchema = new mongoose.Schema(
     {
@@ -11,6 +12,18 @@ const postSchema = new mongoose.Schema(
 
     }
 )
+
+//Post middleware
+
+postSchema.post('remove', async (doc) => {
+
+
+    for (let id of (doc as any).comments) {
+        await Comment.findByIdAndDelete({ _id: id })
+    }
+
+})
+
 
 //Virtual Field Logic
 postSchema.virtual('commentCount').get(function () {

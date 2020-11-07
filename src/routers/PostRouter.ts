@@ -34,7 +34,10 @@ class PostRouter {
     patchRoutes() {
         this.router.patch('/edit/:id', GlobalCheckErrorMiddleWare.authentication, PostValidators.editPost(), GlobalCheckErrorMiddleWare.checkError, PostController.editPost)
     }
-    deleteRoutes() { }
+
+    deleteRoutes() { 
+  this.router.delete('/delete/:id', GlobalCheckErrorMiddleWare.authentication, PostValidators.deletePost(), GlobalCheckErrorMiddleWare.checkError, PostController.deletePost)
+    }
 
 }
 
