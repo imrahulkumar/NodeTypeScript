@@ -94,6 +94,29 @@ npm install --save @types/joi
 
    npm i node-schedule
    npm i @types/node-schedule
+
+## Type of Indexes
+
+   Ex.:  Take a scenario such as => name, age, Addr:[{zip:'201004'}] 
+         1 and -1 denotes ascending or descending order.
+
+   1) Single Field  : apply on single field
+                      Example: db.user.createIndex({name:1})
+
+
+   2) Compound  : apply in multilple field where we form query with multiple conditions
+                  Example: db.user.createIndex({name:1, age:1})
+
+   3) Multi-Key : apply on field where exist multiple data for eg. there are    
+                  multiple address of the single user.
+                  Example: db.user.createIndex({address.zip:1})
+
+   4) Text : Used in the case such as searching operations.
+             Example: db.user.createIndex({name:'text'})
+
+
+   5) Geo Spatial : For eg. find the result which is near you geo-coordinates.
+                    Applied on Geographical Co-ordinates
   
 
 
