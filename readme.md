@@ -117,6 +117,11 @@ npm install --save @types/joi
 
    5) Geo Spatial : For eg. find the result which is near you geo-coordinates.
                     Applied on Geographical Co-ordinates
+
+## About Indexing
+
+- Just added in Scheme => index: { background: true, unique: true } 
+- 
   
 
 

@@ -27,6 +27,9 @@ class UserRouter {
         //STEP 4: To reset the password
         this.router.get('/reset/password', UserValidators.sendResetPassword(), GlobalCheckErrorMiddleWare.checkError, UserController.sendResetPassword)
 
+        //To check the index
+        this.router.get('/test',UserController.test)
+   
     }
     postRoutes() {
         //STEP 1 : To create a user using signup

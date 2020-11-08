@@ -168,4 +168,21 @@ export class UserController {
 
     }
 
+
+    //Single Field Indexing 
+    // static async test(req, res, next) {
+    //     const user = await User.find({ email: 'ashish.k@mailinator.com' })
+    //                       .setOptions({explain:'executionStats'});
+    //                       res.send(user)
+    // }
+
+    // Multi Field Indexing
+    static async test(req, res, next) {
+        const user = await User.find({ email: 'rahul.k@mailinator.com',
+                                       password:'$2b$10$5mRQr1IU5SjQfDR6WeKNJOoLcZB9IiFg0i81tdgSWReXRKV7Cm5VG"' })
+                          .setOptions({explain:'executionStats'});
+                          res.send(user)
+    }
+
+
 }
