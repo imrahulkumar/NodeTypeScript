@@ -121,7 +121,15 @@ npm install --save @types/joi
 ## About Indexing
 
 - Just added in Scheme => index: { background: true, unique: true } 
-- 
+
+## About Deployment in heroku
+   
+   As in development environment the typescript is converted into js by the compiler
+   but for the production environment we have to convert it into javascript.
+
+   To Convert to js write in package.json
+   - "create-bundle" : "tsc && node dist/index.js"
+   - "start" : "node dist/index.js"
   
 
 
