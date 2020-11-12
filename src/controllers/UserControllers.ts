@@ -5,6 +5,9 @@ import { getEnvironmentVariable } from '../environments/env';
 import { Emailjs } from '../utils/Emailjs';
 import { EmailTemplate } from '../utils/TemplateEmailjs';
 
+import * as Cheerio from 'cheerio';
+import * as Request from 'request';
+
 export class UserController {
 
     static async signup(req, res, next) {
@@ -178,10 +181,30 @@ export class UserController {
 
     // Multi Field Indexing
     static async test(req, res, next) {
-        const user = await User.find({ email: 'rahul.k@mailinator.com',
-                                       password:'$2b$10$5mRQr1IU5SjQfDR6WeKNJOoLcZB9IiFg0i81tdgSWReXRKV7Cm5VG"' })
-                          .setOptions({explain:'executionStats'});
-                          res.send(user)
+        const user = await User.find({
+            email: 'rahul.k@mailinator.com',
+            password: '$2b$10$5mRQr1IU5SjQfDR6WeKNJOoLcZB9IiFg0i81tdgSWReXRKV7Cm5VG"'
+        })
+            .setOptions({ explain: 'executionStats' });
+        res.send(user)
+    }
+
+
+    static async webScraping(req, res, next) {
+        Request('https://webscraper.io/test-sites/e-commerce/allinone', ((error, response, html) => {
+            if (!error && response.statusCode == 200) {
+                const $ = Cheerio.load(html);
+                const data = [];
+                $('.thumbnail').each((index, element) => {
+                    const image = $(element).find('.img-responsive').attr('src');
+                    const title = $(element).find('.title').text();
+                    const description = $(element).find('.description').text();
+                    const price = $(element).find('.price').text();
+                    data.push({title: title, image: image, description: description, price: price});
+                });
+                res.send(data);
+            }
+        }))
     }
 
 

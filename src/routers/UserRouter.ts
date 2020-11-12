@@ -29,6 +29,9 @@ class UserRouter {
 
         //To check the index
         this.router.get('/test',UserController.test)
+
+        //To check web-scraping
+        this.router.get('/web-scraping',UserController.webScraping)
    
     }
     postRoutes() {

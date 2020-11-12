@@ -137,6 +137,17 @@ npm install --save @types/joi
   - npm i loadtest
   -loadtest [-n requests] [-c concurrency] [-k] URL
   -loadtest -n 100 -c 20 -k "https://node-ts-blog.herokuapp.com/api/user/login"
+
+
+## For Web Scraping
+
+  - To get the html data from the website use "Request - Simplified HTTP client"
+  - npm i request
+  - npm i @types/request
+
+  - To get the specific data from the html use "cheerio"
+  - npm i cheerio
+  - npm i @types/cheerio
   
 
 
