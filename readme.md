@@ -149,6 +149,8 @@ npm install --save @types/joi
   - npm i cheerio
   - npm i @types/cheerio
   
+  - Demo Website is "https://webscraper.io/test-sites/e-commerce/allinone"
+  
 
 
 
