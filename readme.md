@@ -130,6 +130,13 @@ npm install --save @types/joi
    To Convert to js write in package.json
    - "create-bundle" : "tsc && node dist/index.js"
    - "start" : "node dist/index.js"
+
+
+## To Check with LoadTest
+
+  - npm i loadtest
+  -loadtest [-n requests] [-c concurrency] [-k] URL
+  -loadtest -n 100 -c 20 -k "https://node-ts-blog.herokuapp.com/api/user/login"
   
 
 
