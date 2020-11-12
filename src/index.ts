@@ -6,5 +6,5 @@ let port = process.env.PORT || 5000;
 
 server.listen(port, () => {
 
-    console.log("Server is running at 5000")
+    console.log(`Server is running at ${port}`)
 })
